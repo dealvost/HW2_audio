@@ -1,0 +1,33 @@
+defaults:
+  - model: deepspeech2
+  - metrics: example
+  - datasets: example
+  - dataloader: example
+  - transforms: example_only_instance
+  - _self_
+
+inferencer:
+  device: auto
+  save_path: "inference_outputs_lm"
+  seed: 1
+  from_pretrained: "/content/template_asr/saved/DeepSpeech2_clean360_2/checkpoint-epoch15.pth"
+
+text_encoder:
+  _target_: src.text_encoder.CTCTextEncoder
+
+trainer:
+  device: auto
+  override: False
+  n_epochs: 1
+  epoch_len: 1
+  monitor: "off"
+  save_period: 1
+  early_stop: 1
+  save_dir: "saved"
+  device_tensors: ["spectrogram", "text_encoded", "spectrogram_length", "text_encoded_length"]
+
+writer:
+  loss_names: ["loss"]
+  run_name: "inference_run"
+  log_checkpoints: False
+  id_length: 8

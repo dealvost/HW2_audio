@@ -1,0 +1,9 @@
+# template_asr_third/src/configs/transforms/example_only_instance.yaml
+
+defaults:
+  - instance_transforms: example
+  - _self_
+
+batch_transforms:
+  train: null
+  inference: null

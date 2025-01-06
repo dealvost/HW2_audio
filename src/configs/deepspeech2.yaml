@@ -1,0 +1,42 @@
+# Это будет ваш "primary config" с именем deepspeech2.yaml, 
+# чтобы вы могли запускать: -cn deepspeech2
+
+defaults:
+  - model: deepspeech2         # <-- ссылаемся на файл src/configs/model/deepspeech2.yaml
+  - writer: wandb
+  - metrics: example
+  - datasets: example
+  - dataloader: example
+  - transforms: example_only_instance
+  - _self_
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 3e-5
+lr_scheduler:
+  _target_: torch.optim.lr_scheduler.OneCycleLR
+  max_lr: 3e-4
+  pct_start: 0.1
+  steps_per_epoch: ${trainer.epoch_len}
+  epochs: ${trainer.n_epochs}
+  anneal_strategy: cos
+
+loss_function:
+  _target_: src.loss.CTCLossWrapper
+
+text_encoder:
+  _target_: src.text_encoder.CTCTextEncoder
+
+trainer:
+  log_step: 50
+  n_epochs: 50
+  epoch_len: 3467
+  device_tensors: ["spectrogram", "text_encoded", "spectrogram_length", "text_encoded_length"]
+  resume_from: null
+  device: auto
+  override: False
+  monitor: "min val_WER_(Argmax)"
+  save_period: 5
+  early_stop: ${trainer.n_epochs}
+  save_dir: "saved"
+  seed: 1

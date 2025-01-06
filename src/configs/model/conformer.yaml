@@ -1,0 +1,7 @@
+# src/configs/model/conformer.yaml
+_target_: src.model.conformer_model.ConformerASR
+n_feats: 128
+n_tokens: 28
+encoder_dim: 256
+num_layers: 12
+num_attention_heads: 4

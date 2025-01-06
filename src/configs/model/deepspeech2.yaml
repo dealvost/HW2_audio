@@ -1,0 +1,17 @@
+# деепсич2.yaml (упрощённый)
+
+_target_: src.model.deepspeech2_model.DeepSpeech2ASR
+
+n_feats: 128
+n_tokens: 28
+rnn_type: "gru"
+
+# Было 1536 => берём 1024
+hidden_size: 1024      
+
+# Можно оставить 8 слоёв
+num_rnn_layers: 8
+
+bidirectional: true
+dropout: 0.1
+activation: "hardtanh"
