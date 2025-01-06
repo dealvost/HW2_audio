@@ -2,68 +2,59 @@
 
 ## About
 
-Этот репозиторий содержит 
+Этот репозиторий содержит файлы для обучения/инференса моделей обученных в рамках ДЗ2
 
-## Installation
+## Установка и загрузка
 
-Follow these steps to install the project:
 
-0. (Optional) Create and activate new environment using [`conda`](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html) or `venv` ([`+pyenv`](https://github.com/pyenv/pyenv)).
-
-   a. `conda` version:
+1. Скопировать репозиторий в среду
 
    ```bash
-   # create env
-   conda create -n project_env python=PYTHON_VERSION
-
-   # activate env
-   conda activate project_env
+   git clone https://github.com/dealvost/HW2_audio.git
    ```
 
-   b. `venv` (`+pyenv`) version:
+2. Исполнить файл download.py:
+   ```bash
+   python HW2_audio/download.py
+   ```
+
+
+3. Исполнить файл download_lm.py:
+   ```bash
+   python HW2_audio/download_lm.py
+   ```
+4. Установить необходимые библиотеки
+   ```bash
+   pip install -r HW2_audio/requirements.txt
+   ```
+5. Запустить инференс модели с LM командой ниже. По результатам выполнения команды будут получены метрики test_CER_(LM) = 0.1841 test_WER_(LM) = 0.3368
+   ```bash
+   python HW2_audio/inference.py -cn inference \
+   inferencer.from_pretrained="template_asr/saved/DeepSpeech2_clean360_2/model_best_wer.pth" \
+   inferencer.save_path="inference_outputs_lm" \
+   model=deepspeech2 
+   ```
+6. Запустить инференс модели на датасете train-other 500  с LM командой ниже.
 
    ```bash
-   # create env
-   ~/.pyenv/versions/PYTHON_VERSION/bin/python3 -m venv project_env
-
-   # alternatively, using default python version
-   python3 -m venv project_env
-
-   # activate env
-   source project_env
+   python HW2_audio/inference.py -cn inference_other \
+   inferencer.from_pretrained="template_asr/saved/DeepSpeech2_trainother/model_best_wer.pth" \
+   inferencer.save_path="inference_outputs_lm" \
+   model=deepspeech2
    ```
-
-1. Install all required packages
-
+7. Запустить инференс модели на датасете train-other 500  с LM с BPE токенизацией командой ниже.
    ```bash
-   pip install -r requirements.txt
+   python HW2_audio/inference_with_lm_beam.py -cn inference_BPE
    ```
 
-2. Install `pre-commit`:
-   ```bash
-   pre-commit install
-   ```
 
-## How To Use
+   Всего к данном отчету прикреплено 4 модели (на самом деле обучалось больше, но прикреплять все не имеет смысла)
 
-To train a model, run the following command:
+   Отчет по модели DeepSpeech2_clean360_2: https://wandb.ai/markoavro01-hse-university/pytorch_template_asr_example/runs/f31rsvua?nw=nwusermarkoavro01
 
-```bash
-python3 train.py -cn=CONFIG_NAME HYDRA_CONFIG_ARGUMENTS
-```
+   Отчет по модели DeepSpeech2_trainother: https://wandb.ai/markoavro01-hse-university/pytorch_template_asr_example/runs/pbmwty22?nw=nwusermarkoavro01
 
-Where `CONFIG_NAME` is a config from `src/configs` and `HYDRA_CONFIG_ARGUMENTS` are optional arguments.
+   Отчет по модели DeepSpeech2_BPE_main:  https://wandb.ai/markoavro01-hse-university/pytorch_template_asr_example/runs/yue2u1sz?nw=nwusermarkoavro01
 
-To run inference (evaluate the model or save predictions):
+   Отчет по модели DeepSpeech2_BPE_finetune_1: https://wandb.ai/markoavro01-hse-university/pytorch_template_asr_example/runs/qnkkkno8?nw=nwusermarkoavro01 (неудачная попытка исполльзовать аугментации для повышения метрик относительно модели BPE_main)
 
-```bash
-python3 inference.py HYDRA_CONFIG_ARGUMENTS
-```
-
-## Credits
-
-This repository is based on a [PyTorch Project Template](https://github.com/Blinorot/pytorch_project_template).
-
-## License
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
